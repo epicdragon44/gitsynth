@@ -6,7 +6,7 @@ export default function Home() {
       <div className="w-full h-[54px] absolute top-[178px] border-y border-t-white/20 border-b-white/10 bg-white/[0.025]" />
       <div className="flex flex-row items-start w-full h-fit px-3">
         <Image
-          className="dark:invert mt-16"
+          className="invert mt-16"
           src="/gs.svg"
           alt="GitSynth Logo"
           width={180}
@@ -61,7 +61,7 @@ export default function Home() {
         {new Array(8).fill(0).map((_, i) => (
           <Image
             key={i}
-            className={`dark:invert opacity-10 -translate-x-${4 * (i === 0 ? 0 : i + 1)}`}
+            className={`invert opacity-10 -translate-x-${4 * (i === 0 ? 0 : i + 1)}`}
             src="/gs.svg"
             alt="GitSynth Logo"
             width={180}
