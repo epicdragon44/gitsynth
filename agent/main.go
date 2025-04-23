@@ -6,8 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/anthropics/anthropic-sdk-go/option"
+	"github.com/joho/godotenv"
 )
 
 type Agent struct {
@@ -24,7 +27,29 @@ type ToolDefinition struct {
 }
 
 func main() {
-	client := anthropic.NewClient()
+	// Look for .env file in current directory and load it
+	envPath := ".env"
+	err := godotenv.Load(envPath)
+	if err != nil {
+		// Try to check if the file exists to provide a more specific error
+		if _, statErr := os.Stat(envPath); os.IsNotExist(statErr) {
+			absPath, _ := filepath.Abs(envPath)
+			fmt.Printf("Error: .env file not found in current directory (%s)\n", absPath)
+		} else {
+			fmt.Printf("Error: Could not load .env file: %v\n", err)
+		}
+		os.Exit(1)
+	}
+
+	// Get API key from environment
+	apiKey := os.Getenv("ANTHROPIC_API_KEY")
+	if apiKey == "" {
+		fmt.Println("Error: ANTHROPIC_API_KEY not set in .env file")
+		fmt.Println("Please add ANTHROPIC_API_KEY=your-api-key to your .env file")
+		os.Exit(1)
+	}
+
+	client := anthropic.NewClient(option.WithAPIKey(apiKey))
 
 	scanner := bufio.NewScanner(os.Stdin)
 	getUserMessage := func() (string, bool) {
@@ -33,11 +58,11 @@ func main() {
 		}
 		return scanner.Text(), true
 	}
-	tools := []ToolDefinition{ReadFileDefinition, ListFilesDefinition, EditFileDefinition}
+	tools := []ToolDefinition{ReadFileDefinition, ListFilesDefinition, EditFileDefinition, FindMergeConflictsDefinition}
 	agent := NewAgent(&client, getUserMessage, tools)
-	err := agent.Run(context.TODO())
-	if err != nil {
-		fmt.Printf("Error: %s\n", err.Error())
+	runErr := agent.Run(context.TODO())
+	if runErr != nil {
+		fmt.Printf("Error: %s\n", runErr.Error())
 	}
 }
 
@@ -52,9 +77,16 @@ func NewAgent(client *anthropic.Client, getUserMessage func() (string, bool), to
 func (a *Agent) Run(ctx context.Context) error {
 	conversation := []anthropic.MessageParam{}
 
-	fmt.Println("Chat with Claude (use 'ctrl-c' to quit)")
+	fmt.Println("WELCOME TO GITSYNTH [LOCAL AGENT]. Use 'ctrl-c' to quit at any time.")
+	fmt.Println("GitSynth will now begin resolving your merge conflicts.")
 
-	readUserInput := true
+	// Add default first message to start the conversation
+	defaultPrompt := "Identify all files with merge conflicts, and resolve them such that it captures and preserves the spirit and intent of all changes, while leaving the code just as if not more functional and clean than before."
+	userMessage := anthropic.NewUserMessage(anthropic.NewTextBlock(defaultPrompt))
+	conversation = append(conversation, userMessage)
+	fmt.Printf("\u001b[94mYou\u001b[0m: %s\n", defaultPrompt)
+
+	readUserInput := false // Start with the default message, so don't read input first
 	for {
 		if readUserInput {
 			fmt.Print("\u001b[94mYou\u001b[0m: ")
