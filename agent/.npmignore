@@ -1,0 +1,15 @@
+# Source code
+*.go
+go.mod
+go.sum
+Makefile
+
+# Environment files
+.env
+
+# Git files
+.git
+.gitignore
+
+# Only include the main README for npm
+README.md

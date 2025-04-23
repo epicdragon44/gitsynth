@@ -1,0 +1,42 @@
+{
+  "name": "gitsynth",
+  "version": "0.1.0",
+  "description": "GitSynth - AI-powered Git assistant",
+  "bin": {
+    "gitsynth": "./bin/gitsynth"
+  },
+  "files": [
+    "bin/gitsynth",
+    "bin/gitsynth-linux",
+    "bin/gitsynth-darwin",
+    "bin/gitsynth-win.exe",
+    "scripts/postinstall.js"
+  ],
+  "preferGlobal": true,
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "os": [
+    "linux",
+    "darwin",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/gitsynth.git"
+  },
+  "keywords": [
+    "git",
+    "ai",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT"
+}
