@@ -1,6 +1,6 @@
 # GitSynth
 
-GitSynth is an AI-powered Git assistant tool.
+GitSynth is an AI-powered Git Merge Conflict Resolution tool.
 
 ## Installation
 

@@ -1,7 +1,7 @@
 {
   "name": "gitsynth",
   "version": "0.1.0",
-  "description": "GitSynth - AI-powered Git assistant",
+  "description": "GitSynth - Automatic Merge Conflict Resolution",
   "bin": {
     "gitsynth": "./bin/gitsynth"
   },
@@ -30,13 +30,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/gitsynth.git"
+    "url": "https://github.com/epicdragon44/gitsynth.git"
   },
   "keywords": [
     "git",
     "ai",
     "cli"
   ],
-  "author": "",
+  "author": "Daniel Wei",
   "license": "MIT"
 }

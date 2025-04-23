@@ -58,7 +58,7 @@ func main() {
 		}
 		return scanner.Text(), true
 	}
-	tools := []ToolDefinition{ReadFileDefinition, ListFilesDefinition, EditFileDefinition, FindMergeConflictsDefinition}
+	tools := []ToolDefinition{ReadFileDefinition, ListFilesDefinition, EditFileDefinition, FindMergeConflictsDefinition, GitCommandDefinition}
 	agent := NewAgent(&client, getUserMessage, tools)
 	runErr := agent.Run(context.TODO())
 	if runErr != nil {
@@ -81,7 +81,7 @@ func (a *Agent) Run(ctx context.Context) error {
 	fmt.Println("GitSynth will now begin resolving your merge conflicts.")
 
 	// Add default first message to start the conversation
-	defaultPrompt := "Identify all files with merge conflicts, and resolve them such that it captures and preserves the spirit and intent of all changes, while leaving the code just as if not more functional and clean than before."
+	defaultPrompt := "Identify all files with merge conflicts, and resolve them such that it captures and preserves the spirit and intent of all changes, while leaving the code just as if not more functional and clean than before. When you're all done, commit the changes."
 	userMessage := anthropic.NewUserMessage(anthropic.NewTextBlock(defaultPrompt))
 	conversation = append(conversation, userMessage)
 	fmt.Printf("\u001b[94mYou\u001b[0m: %s\n", defaultPrompt)
