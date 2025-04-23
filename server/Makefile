@@ -1,0 +1,40 @@
+# Compiler settings
+GO := go
+GOFMT := gofmt
+BINARY_NAME := gitsynth-server
+BINARY_DIR := bin
+BINARY_PATH := $(BINARY_DIR)/$(BINARY_NAME)
+
+# Build flags
+BUILD_FLAGS := -v
+
+# Source files
+SRC_FILES := $(wildcard *.go)
+
+# Build target
+.PHONY: all build clean fmt help
+
+all: clean fmt build
+
+build:
+	@echo "Building server binary..."
+	@mkdir -p $(BINARY_DIR)
+	$(GO) build $(BUILD_FLAGS) -o $(BINARY_PATH) .
+	@echo "Binary built at $(BINARY_PATH)"
+
+clean:
+	@echo "Cleaning build artifacts..."
+	@rm -f $(BINARY_PATH)
+	@echo "Clean complete"
+
+fmt:
+	@echo "Formatting code..."
+	$(GOFMT) -w $(SRC_FILES)
+	@echo "Format complete"
+
+help:
+	@echo "Available commands:"
+	@echo "  make build   - Build the server binary"
+	@echo "  make clean   - Remove the server binary"
+	@echo "  make fmt     - Format the Go source code"
+	@echo "  make all     - Clean, format, and build (default)"
