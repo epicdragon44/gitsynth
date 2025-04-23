@@ -26,7 +26,3 @@ GitSynth includes binaries for:
 ## Requirements
 
 - Node.js 12 or later
-
-## License
-
-MIT
