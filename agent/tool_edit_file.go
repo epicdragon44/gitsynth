@@ -14,6 +14,10 @@ var EditFileDefinition = ToolDefinition{
 
 Replaces 'old_str' with 'new_str' in the given file. 'old_str' and 'new_str' MUST be different from each other.
 
+Basically, Find and Replace.
+
+Use for making small, concise edits to unique strings in a file.
+
 If the file specified with path doesn't exist, it will be created.
 `,
 	InputSchema: EditFileInputSchema,
