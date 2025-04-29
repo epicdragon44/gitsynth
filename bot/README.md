@@ -1,33 +1,20 @@
-# bot
+# GitHub Bot
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that Resolve your merge conflicts instantly.
+This is the GitHub bot component of GitSynth.
 
-## Setup
+## Development
 
 ```sh
 # Install dependencies
-npm install
+make build
 
 # Run the bot
-npm start
+make run
 ```
 
-## Docker
+## Deployment
 
 ```sh
-# 1. Build container
-docker build -t bot .
-
-# 2. Start container
-docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> bot
+# Build container and start it
+APP_ID=<app-id> PRIVATE_KEY=<pem-value> make deploy
 ```
-
-## Contributing
-
-If you have suggestions for how bot could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
-
-For more, check out the [Contributing Guide](CONTRIBUTING.md).
-
-## License
-
-[ISC](LICENSE) © 2025 Daniel Wei

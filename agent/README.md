@@ -1,28 +1,20 @@
-# GitSynth
+# local agent
 
-GitSynth is an AI-powered Git Merge Conflict Resolution tool.
+## development
 
-## Installation
-
-```bash
-npm install -g gitsynth
+```
+make
 ```
 
-## Usage
+## building
 
-After installation, you can use the `gitsynth` command globally:
-
-```bash
-gitsynth
+```
+make build-all
 ```
 
-## Platform Support
+## publishing
 
-GitSynth includes binaries for:
-- Linux (x64)
-- macOS (x64)
-- Windows (x64)
-
-## Requirements
-
-- Node.js 12 or later
+```
+make version-patch|minor|major
+make publish
+```

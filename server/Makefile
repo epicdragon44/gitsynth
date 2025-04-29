@@ -8,11 +8,15 @@ BINARY_PATH := $(BINARY_DIR)/$(BINARY_NAME)
 # Build flags
 BUILD_FLAGS := -v
 
+# Docker settings
+DOCKER_IMAGE := gitsynth-server
+DOCKER_TAG := latest
+
 # Source files
 SRC_FILES := $(wildcard *.go)
 
 # Build target
-.PHONY: all build clean fmt help
+.PHONY: all build clean fmt help deploy
 
 all: clean fmt build
 
@@ -32,9 +36,16 @@ fmt:
 	$(GOFMT) -w $(SRC_FILES)
 	@echo "Format complete"
 
+deploy: build
+	@echo "Building Docker image $(DOCKER_IMAGE):$(DOCKER_TAG)..."
+	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) -f Dockerfile .
+	@echo "Docker image built successfully"
+	@echo "To run the container use: docker run -d -p 8080:8080 --privileged $(DOCKER_IMAGE):$(DOCKER_TAG)"
+
 help:
 	@echo "Available commands:"
 	@echo "  make build   - Build the server binary"
 	@echo "  make clean   - Remove the server binary"
 	@echo "  make fmt     - Format the Go source code"
+	@echo "  make deploy  - Build the server binary and create a Docker image"
 	@echo "  make all     - Clean, format, and build (default)"
