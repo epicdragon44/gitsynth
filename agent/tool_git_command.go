@@ -15,7 +15,7 @@ var GitCommandDefinition = ToolDefinition{
 }
 
 type GitCommandInput struct {
-	Command string `json:"command" jsonschema_description:"The git command to execute. Must start with 'git'."` 
+	Command string `json:"command" jsonschema_description:"The git command to execute. Must start with 'git'."`
 }
 
 var GitCommandInputSchema = GenerateSchema[GitCommandInput]()
