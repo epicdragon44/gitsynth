@@ -1,8 +1,6 @@
-# GitHub Bot
+# github bot
 
-This is the GitHub bot component of GitSynth.
-
-## Development
+## development
 
 ```sh
 # Install dependencies
@@ -12,7 +10,7 @@ make build
 make run
 ```
 
-## Deployment
+## deployment
 
 ```sh
 # Build container and start it

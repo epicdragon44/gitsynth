@@ -6,7 +6,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 // RunRequest represents the request payload for the run endpoint
@@ -71,6 +75,31 @@ func RunHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Processing run request: Author=%s, Repo=%s, PR ID=%d", 
 		requestBody.Author, requestBody.Repo, requestBody.PRID)
 
+	// Load the ANTHROPIC_API_KEY from .env file
+	anthropicApiKey := ""
+	
+	// Determine the current working directory
+	execPath, err := os.Executable()
+	if err != nil {
+		log.Printf("Warning: Failed to get executable path: %v", err)
+	} else {
+		execDir := filepath.Dir(execPath)
+		dotenvPath := filepath.Join(execDir, ".env")
+		
+		// Load the .env file
+		err = godotenv.Load(dotenvPath)
+		if err != nil {
+			log.Printf("Warning: Failed to load .env file: %v", err)
+		} else {
+			anthropicApiKey = os.Getenv("ANTHROPIC_API_KEY")
+			if anthropicApiKey == "" {
+				log.Printf("Warning: ANTHROPIC_API_KEY not found in .env file")
+			} else {
+				log.Printf("Successfully loaded ANTHROPIC_API_KEY from .env file")
+			}
+		}
+	}
+
 	// Initialize GitHub service
 	githubService := NewGitHubService(requestBody.GithubToken)
 
@@ -106,12 +135,19 @@ func RunHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create container config with environment variables
+	envVars := []string{
+		"GIT_TERMINAL_PROMPT=0", // Disable git terminal prompts
+		fmt.Sprintf("GITHUB_TOKEN=%s", requestBody.GithubToken),
+	}
+
+	// Add ANTHROPIC_API_KEY to environment variables if available
+	if anthropicApiKey != "" {
+		envVars = append(envVars, fmt.Sprintf("ANTHROPIC_API_KEY=%s", anthropicApiKey))
+	}
+
 	containerConfig := ContainerConfig{
 		ImageName: nodeImage,
-		Env: []string{
-			"GIT_TERMINAL_PROMPT=0", // Disable git terminal prompts
-			fmt.Sprintf("GITHUB_TOKEN=%s", requestBody.GithubToken),
-		},
+		Env: envVars,
 	}
 
 	// Create and start container

@@ -16,9 +16,9 @@ DOCKER_TAG := latest
 SRC_FILES := $(wildcard *.go)
 
 # Build target
-.PHONY: all build clean fmt help deploy
+.PHONY: all build clean fmt help deploy check-env
 
-all: clean fmt build
+all: clean fmt check-env build
 
 build:
 	@echo "Building server binary..."
@@ -42,10 +42,21 @@ deploy: build
 	@echo "Docker image built successfully"
 	@echo "To run the container use: docker run -d -p 8080:8080 --privileged $(DOCKER_IMAGE):$(DOCKER_TAG)"
 
+# Check for .env file and create from example if it doesn't exist
+check-env:
+	@if [ ! -f .env ]; then \
+		echo "Creating .env file from .env.example..."; \
+		cp .env.example .env; \
+		echo "Please edit .env file with your actual API keys."; \
+	else \
+		echo ".env file already exists."; \
+	fi
+
 help:
 	@echo "Available commands:"
-	@echo "  make build   - Build the server binary"
-	@echo "  make clean   - Remove the server binary"
-	@echo "  make fmt     - Format the Go source code"
-	@echo "  make deploy  - Build the server binary and create a Docker image"
-	@echo "  make all     - Clean, format, and build (default)"
+	@echo "  make build     - Build the server binary"
+	@echo "  make clean     - Remove the server binary"
+	@echo "  make fmt       - Format the Go source code"
+	@echo "  make check-env - Check for .env file and create from example if missing"
+	@echo "  make deploy    - Build the server binary and create a Docker image"
+	@echo "  make all       - Clean, format, check env, and build (default)"

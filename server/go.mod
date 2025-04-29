@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/docker/docker v24.0.7+incompatible
 	github.com/google/go-github/v60 v60.0.0
+	github.com/joho/godotenv v1.5.1
 	golang.org/x/oauth2 v0.18.0
 )
 
