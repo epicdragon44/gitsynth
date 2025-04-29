@@ -14,7 +14,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
-		fmt.Fprintf(w, "Welcome to the Go Web Server!")
+		fmt.Fprintf(w, "Welcome to the GitSynth Web Server!")
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "Method %s not allowed", r.Method)
