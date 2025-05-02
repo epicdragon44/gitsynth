@@ -15,9 +15,9 @@ import (
 
 // RunRequest represents the request payload for the run endpoint
 type RunRequest struct {
-	Author     string `json:"author"`      // Github Repo author or org
-	Repo       string `json:"repo"`        // Github Repo name
-	PRID       int    `json:"pr_id"`       // Github PR ID (numerical)
+	Author      string `json:"author"`       // Github Repo author or org
+	Repo        string `json:"repo"`         // Github Repo name
+	PRID        int    `json:"pr_id"`        // Github PR ID (numerical)
 	GithubToken string `json:"github_token"` // Github token for authentication
 }
 
@@ -72,12 +72,12 @@ func RunHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Log the start of processing (without exposing the token)
-	log.Printf("Processing run request: Author=%s, Repo=%s, PR ID=%d", 
+	log.Printf("Processing run request: Author=%s, Repo=%s, PR ID=%d",
 		requestBody.Author, requestBody.Repo, requestBody.PRID)
 
 	// Load the ANTHROPIC_API_KEY from .env file
 	anthropicApiKey := ""
-	
+
 	// Determine the current working directory
 	execPath, err := os.Executable()
 	if err != nil {
@@ -85,7 +85,7 @@ func RunHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		execDir := filepath.Dir(execPath)
 		dotenvPath := filepath.Join(execDir, ".env")
-		
+
 		// Load the .env file
 		err = godotenv.Load(dotenvPath)
 		if err != nil {
@@ -147,7 +147,7 @@ func RunHandler(w http.ResponseWriter, r *http.Request) {
 
 	containerConfig := ContainerConfig{
 		ImageName: nodeImage,
-		Env: envVars,
+		Env:       envVars,
 	}
 
 	// Create and start container
@@ -235,7 +235,7 @@ func RunHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("Workflow completed successfully for PR #%d in %s/%s", 
+	log.Printf("Workflow completed successfully for PR #%d in %s/%s",
 		requestBody.PRID, requestBody.Author, requestBody.Repo)
 
 	// Return success response

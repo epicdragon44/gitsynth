@@ -6,7 +6,7 @@
 make
 ```
 
-You can then execute the binary.
+You can then execute the binary, which should be in `./bin/`.
 
 ## building
 

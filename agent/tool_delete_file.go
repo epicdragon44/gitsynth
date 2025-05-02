@@ -7,11 +7,8 @@ import (
 )
 
 var DeleteFileDefinition = ToolDefinition{
-	Name: "delete_file",
-	Description: `Delete a file at the given path.
-
-Removes the specified file from the filesystem. Returns an error if the file does not exist.
-`,
+	Name:        "delete_file",
+	Description: "Delete a file at the given path. Removes the specified file from the filesystem. Returns an error if the file does not exist.",
 	InputSchema: DeleteFileInputSchema,
 	Function:    DeleteFile,
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"net/http"
+	"path/filepath"
 )
 
 // HomeHandler handles requests to the root path
@@ -15,128 +16,12 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		w.Header().Set("Content-Type", "text/html")
-		
-		// Define the HTML template for the landing page
-		const htmlTemplate = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitSynth</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background-color: #000;
-      color: white;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-    .gs-logo {
-      filter: invert(1);
-    }
-    .gs-logo-footer {
-      filter: invert(1);
-      opacity: 0.1;
-    }
-  </style>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            black: '#000',
-            darkBg: '#0A0A0A',
-          }
-        }
-      }
-    }
-  </script>
-</head>
-<body class="bg-black text-white">
-  <main class="relative min-h-screen flex flex-col justify-between">
-    <div class="w-full h-[54px] absolute top-[178px] border-y border-t-white/20 border-b-white/10 bg-white/[0.025]"></div>
-    <div class="flex flex-row items-start w-full h-fit px-3">
-      <svg class="gs-logo mt-16" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <div class="flex flex-col border-x-2 border-white/10 h-screen relative ml-3">
-        <h1 class="flex flex-row items-center justify-start gap-4 text-[10rem] font-medium -ml-3">
-          GitSynth
-        </h1>
-        <p class="text-lg font-medium tracking-tight text-justify select-none -mt-3 mb-48 max-w-[640px] leading-snug">
-          Version Control Systems like Git dominate top engineering team
-          workflows. But Git is only an&nbsp;
-          <span class="bg-gradient-to-r from-white/40 to-white/80 bg-clip-text text-transparent">
-            approximation
-          </span>
-          of the underlying intent of a human author's changes, by comparing
-          those changes across a lossy and conflict-prone medium: manifest
-          lines of code. We're reimagining a tool that hasn't changed in over
-          two decades to become
-          <span class="bg-gradient-to-r from-red-500 to-purple-500 bg-clip-text text-transparent">
-            intentionally and contextually aware
-          </span>
-          -- to capture the goal behind every keystroke, resolve conflicts
-          ahead of time, and unlock fundamentally complex workflows for teams
-          of any size for 10x development velocity at scale.
-        </p>
-        <div class="group absolute bottom-36 w-[640px] inline-block p-[2px] rounded-full bg-gradient-to-r from-red-500 to-purple-500 scale-105">
-          <input
-            autofocus
-            type="text"
-            placeholder="https://github.com/your/repo/pull/1251"
-            class="w-full rounded-full py-2 px-4 bg-gradient-to-b from-black to-darkBg focus:outline-none z-10"
-          />
-        </div>
-      </div>
-      <ul class="flex flex-col h-[178px] relative gap-2 justify-end font-bold select-none">
-        <li>HOME</li>
-        <li>ABOUT</li>
-        <li>JOBS</li>
-      </ul>
-    </div>
-    <div class="w-full h-[54px] px-[204px] absolute bottom-[188px] border-t border-white/10 bg-white/[0.012] flex flex-row gap-3 items-center">
-      <span class="px-2 py-1 rounded-full bg-gradient-to-r from-red-500 to-purple-500 text-white text-xs font-extrabold tracking-wider">
-        PREVIEW
-      </span>
-      <span class="text-sm text-white tracking-tight font-extrabold">
-        RESOLVE MERGE CONFLICTS ON ANY PR NOW
-      </span>
-    </div>
-    <footer class="absolute border-t border-t-white/20 bottom-0 z-10 bg-darkBg w-full h-fit px-3 flex flex-row flex-nowrap overflow-clip items-center justify-start">
-      <!-- Generate 8 logo instances -->
-      <svg class="gs-logo-footer" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <svg class="gs-logo-footer -translate-x-8" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <svg class="gs-logo-footer -translate-x-12" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <svg class="gs-logo-footer -translate-x-16" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <svg class="gs-logo-footer -translate-x-20" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <svg class="gs-logo-footer -translate-x-24" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <svg class="gs-logo-footer -translate-x-28" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-      <svg class="gs-logo-footer -translate-x-32" width="180" height="90" viewBox="0 0 200 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M75 0H50V25H25V50H0V75H25V100H50V125H75V100H100V75H125V50H150V75H175V100H150V125H175V100H200V75H175V50H150V25H175V0H150V25H125V50H100V75H75V100H50V75H25V50H50V25H75V0Z" fill="#0A0A0A"/>
-      </svg>
-    </footer>
-  </main>
-</body>
-</html>`
 
-		// Serve the HTML template
-		tmpl, err := template.New("home").Parse(htmlTemplate)
+		// Load the HTML template from file
+		tmplPath := filepath.Join("templates", "home.html")
+		tmpl, err := template.ParseFiles(tmplPath)
 		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 		tmpl.Execute(w, nil)

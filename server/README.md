@@ -3,8 +3,10 @@
 ## development
 
 ```
-make build
+make
 ```
+
+You can then execute the binary, which should be in `./bin/`.
 
 ## deployment
 
