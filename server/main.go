@@ -42,25 +42,20 @@ func main() {
 		panic(err)
 	}
 
-	// Initialize handlers
-	prCommentHandler := &PRCommentHandler{
-		ClientCreator: cc,
-		preamble:      config.AppConfig.PullRequestPreamble,
-	}
-
 	// Create temporary directory for git operations
 	tmpDir, err := os.MkdirTemp("", "gitsynth-*")
 	if err != nil {
 		panic(err)
 	}
 
+	// Initialize handler
 	prMergeHandler := &PRMergeHandler{
 		ClientCreator: cc,
-		workdir:       tmpDir,
+		workdir:      tmpDir,
 	}
 
 	// Create GitHub webhook handler
-	webhookHandler := githubapp.NewDefaultEventDispatcher(config.Github, prCommentHandler, prMergeHandler)
+	webhookHandler := githubapp.NewDefaultEventDispatcher(config.Github, prMergeHandler)
 
 	// Register routes with the server
 	server.Mux().Handle(pat.Post(githubapp.DefaultWebhookRoute), webhookHandler)
