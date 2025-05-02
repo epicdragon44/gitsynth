@@ -1,10 +1,43 @@
 server:
-  address: 127.0.0.1
+  address: "127.0.0.1"
   port: 8080
 
 logging:
-  pretty: false
-  level: debug
+  level: INFO
 
-app:
-  message: "The bird is the word."
+github:
+  v3_api_url: "https://api.github.com/"
+  app:
+    integration_id: 0
+    webhook_secret: "gs-haesebtkjwhsav28"
+    private_key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEA735EHl3b6hdsnLBSbCF0v1BMIxBCvZEy/sHrXoxU8g/1byUx
+      cvXa8a5nuBo/h25r2uA4LOJcwJb71HTZAyxSs91So1Uzc15pn8+7JRIuLj1pZGEy
+      ykvt03iWteBD5euFCr+LqGIEtT2M1k9YkAAaMYI/QOXvl6E88T1kNiv9faU4IPAF
+      yxZubp9jMWQZHdkiKQ4Rvtm9+SDywGotMTPPegBRsX3u/e5Lg/fIQY0d5B7i7gTJ
+      D9Fh4Z3B0mqiELMD69bClf8gciS2raU6+VLjpAdTQrgUlkekZNNhzWhG8r/TGpao
+      qul1QtvwxHxavw7c+z+c4a1nsSTaEXmAR007xwIDAQABAoIBAHYqhtG03d0S0bQ+
+      C2zu1PvQUsC6NTPzgIXSiJ+N/huxZBgC8fMW+4Bj3SkpSk84XF8SYqVCyyD7XiXl
+      wW2fYO7+NNgCIfC6lMMVa/FOlxqZknbEvpqx/BZrWXFDxjybiHlVKUNbmZcTV3om
+      jDwA0Ou8qBkNWromBDvDXr6b1ec3uZfOLhBe1mm+pFp7cOzJmvD7aFf0QKcigd+A
+      5q60zcvsAalU9TDEtjzqV2Nz4PCzgUQJq7gIk1dZig27V/lNP29qD7pYxbaxul8M
+      4XNsPUqrPU/Q5bwXdkOjPVEOAlMFzezUBA5sV2iEX0RJrrDTbRGJlbLgJSFZhOzr
+      WcXnUIECgYEA/tkZOTC3H3D01L8M6kM2kQXpeY+SpF/hXkeAv93dD/KSusrbe79R
+      EevZkjnGSpE6noGtvOtmk4idCoZs2AEBQ4UVLD3/QdVEm5WLbZOWmIJ7XQepHG2R
+      ReRTxEl2PA3CGpInbV188pWZsFQ+O8tCLSUW31CG9J12wlF8xY+qdIUCgYEA8JNm
+      RRPfkk+1VqO+VCgS3Kzo2+0u1oAEGbaUAKVUfuvtKk1wLIR1JEz/hdmUYEVt8SQt
+      oNbcdzMGyPkbQhuPWtaoQpR6/gf6srZBEOj74EsnUpy8Nb6Vy9tfTpDnH0e6tHVr
+      K9RTAO2j+rOPa2C4DmtzSrSSTxc8zNZHaWKhttsCgYB2ZIkRRo5sLt+uzirD0gHR
+      kbuLW6W2c0yRrgokGIAQXpLH8GHStWiGONlU0z5JefqPlJMQBxQaSgca0qRSHPVn
+      VrYlXY/uF5PN68VgXIZDx6pj56EqscQhghdgQviIoaOhEHD8n8fiMpm5jwlyYdUW
+      f/qGODTaAyUe1Rhv93QquQKBgAPiPUpsMbXI96J4bkApjXRmjjPOtmzcEDTiD62a
+      /aw23tNKAL+XO9TkMVPV2WFcfZPhA6OPFGwQNNHVw6zjiQLsaDb68qlbM57i9lXx
+      jO9oBzB8O0Wa2Aw8dGNuT2zf2ZHEO4Cvos9nBrirYWtYWmBRN8FC/QGt3FtqMijv
+      YLD1AoGBAOc0aBescYA7yvYKU7DlpLiPbO6rB3f4ySXJPigEYgsdPz0U5aHUbN5s
+      tELOGpqeuDNmYazk5iyt49PWkBrsQa9U9Z1F26ZmSzxEfpd9Pke3AI1XpBllJTJ3
+      Mp6O57rK/Wg7xrLHECReyBpDj14vMOzoNiQvQ5PzwCqOaEErQHP+
+      -----END RSA PRIVATE KEY-----
+
+app_configuration:
+  pull_request_preamble: "GitSynth starting..."

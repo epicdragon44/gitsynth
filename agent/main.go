@@ -63,20 +63,19 @@ Your mission: Resolve all Git merge conflicts across files such that:
      - **Summarize each side's intent** (e.g. feature addition, logic rewrite, formatting).
      - **Plan a resolution** that integrates the intended outcomes from both sides where possible.
     Example tool calls:
-    - To view the file contents: view_file({ "path": "src/utils.js" })
+    - First, view the file contents: view_file({ "path": "src/utils.js" })
     - To view the file contents alongside a git blame:
     	view_file({
 	      "path": "src/utils.js",
 	      "with_blame": true
 	    })
-	- To view the git conflict chunks within the file: see_file_chunks({ "path": "src/utils.js" })
-	- To view past commits that involved changes to the file: see_git_history({ "path": "src/utils.js" })
-	- To view a past version of the file at any specific commit:
+	- Then, view past commits that involved changes to the file: see_git_history({ "path": "src/utils.js" })
+	- Then, browse past versions of the file at specific commits in order to see what it used to look like:
 		see_file_version({
 	      "path": "src/utils.js",
 	      "commit_id": "a1b2c3"
 	    })
-	-
+    - Finally, view the git conflict chunks within the file: see_file_chunks({ "path": "src/utils.js" })
 
 3. **Making Edits**:
    - Once you've identified how you want to change the file, make edits to replace the contents of each conflicting chunk, one at a time.

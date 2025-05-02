@@ -1,78 +1,74 @@
-// Copyright 2018 Palantir Technologies, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
 import (
-	"net/http"
+	"os"
+	"time"
 
+	"github.com/gregjones/httpcache"
 	"github.com/palantir/go-baseapp/baseapp"
-	"github.com/palantir/go-baseapp/baseapp/datadog"
-	"github.com/rs/zerolog"
+	"github.com/palantir/go-githubapp/githubapp"
+	"github.com/rcrowley/go-metrics"
 	"goji.io/pat"
 )
 
-type MessageHandler struct {
-	Message string
-}
-
-func (h *MessageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	logger := zerolog.Ctx(ctx)
-
-	// Logging example
-	logger.Info().Str("user-agent", r.Header.Get("User-Agent")).Msg("Received request")
-
-	baseapp.WriteJSON(w, http.StatusOK, map[string]string{
-		"message": h.Message,
-	})
-}
-
-// type assertion
-var _ http.Handler = &MessageHandler{}
-
 func main() {
-	// Load your configuration from a file
 	config, err := ReadConfig("config.yml")
 	if err != nil {
 		panic(err)
 	}
 
-	// Configure a root logger for everything to use
+	// Configure logger
 	logger := baseapp.NewLogger(config.Logging)
 
-	// Create a server using the default options
-	serverParams := baseapp.DefaultParams(logger, "example.")
+	// Create server with default parameters
+	serverParams := baseapp.DefaultParams(logger, "gitsynth.")
 	server, err := baseapp.NewServer(config.Server, serverParams...)
 	if err != nil {
 		panic(err)
 	}
 
-	// Register your routes with the server
-	messageHandler := &MessageHandler{Message: config.App.Message}
-	server.Mux().Handle(pat.Get("/api/message"), messageHandler)
-
-	// Register the home page handler
-	server.Mux().HandleFunc(pat.Get("/"), HomeHandler)
-
-	// Start a goroutine to emit server metrics to Datadog
-	if err := datadog.StartEmitter(server, config.Datadog); err != nil {
+	// Configure GitHub client creator with metrics
+	metricsRegistry := metrics.DefaultRegistry
+	cc, err := githubapp.NewDefaultCachingClientCreator(
+		config.Github,
+		githubapp.WithClientUserAgent("gitsynth/1.0.0"),
+		githubapp.WithClientTimeout(300*time.Second),
+		githubapp.WithClientCaching(false, func() httpcache.Cache { return httpcache.NewMemoryCache() }),
+		githubapp.WithClientMiddleware(
+			githubapp.ClientMetrics(metricsRegistry),
+		),
+	)
+	if err != nil {
 		panic(err)
 	}
 
+	// Initialize handlers
+	prCommentHandler := &PRCommentHandler{
+		ClientCreator: cc,
+		preamble:      config.AppConfig.PullRequestPreamble,
+	}
+
+	// Create temporary directory for git operations
+	tmpDir, err := os.MkdirTemp("", "gitsynth-*")
+	if err != nil {
+		panic(err)
+	}
+
+	prMergeHandler := &PRMergeHandler{
+		ClientCreator: cc,
+		workdir:       tmpDir,
+	}
+
+	// Create GitHub webhook handler
+	webhookHandler := githubapp.NewDefaultEventDispatcher(config.Github, prCommentHandler, prMergeHandler)
+
+	// Register routes with the server
+	server.Mux().Handle(pat.Post(githubapp.DefaultWebhookRoute), webhookHandler)
+	server.Mux().Handle(pat.Get("/"), &HomeHandler{})
+
 	// Start the server (blocking)
+	logger.Info().Msg("Starting server...")
 	if err = server.Start(); err != nil {
-		logger.Error().Err(err).Msg("server failed")
+		logger.Fatal().Err(err).Msg("Server failed")
 	}
 }
