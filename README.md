@@ -5,8 +5,8 @@ Automatic Merge Conflict Resolution.
 ## Run Locally For Free
 
 ```bash
-npm install -g gitsynth
-gitsynth
+export ANTHROPIC_API_KEY=your-key # OPTIONAL if ANTHROPIC_API_KEY already set in your .env or environment
+npx gitsynth
 ```
 
 ## Run as a Github Action
@@ -16,6 +16,7 @@ gitsynth
 ## Roadmap
 
 - [x] Local Agent: Headless, automatic resolution of merge conflicts
+    - [ ] Smarter historical and project-wide context, with a Find Symbol tool and more.
 - [ ] Github Action: Github App with a serverless `/run` endpoint that clones the repository, gets it into the merge conflict state, runs the local agent, and pushes the changes back up.
 - [ ] Site: Minimalist redesign to link to the Github Action and local agent install instructions.
 
