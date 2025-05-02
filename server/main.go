@@ -16,7 +16,6 @@ func main() {
 	// Register handlers
 	mux.HandleFunc("/", HomeHandler)
 	mux.HandleFunc("/api/hello", HelloHandler)
-	mux.HandleFunc("/api/run", RunHandler)
 
 	// Start the server
 	fmt.Printf("Server starting on port %s...\n", port)

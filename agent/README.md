@@ -24,3 +24,10 @@ make publish
 ## env
 
 When running the binary, make sure ANTHROPIC_API_KEY is set in your environment or `.env` file.
+
+## usage
+
+```
+npm install -g gitsynth
+gitsynth
+```
