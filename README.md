@@ -23,3 +23,4 @@ gitsynth
 
 - [ ] Support for .cursorrules and .rules
 - [ ] Caching and other performance optimizations
+- [ ] Deep thinking mode: agent should track all symbols involved across multiple files and histories before making decisions, and then suggest multiple possible candidates for how to resolve the conflict.

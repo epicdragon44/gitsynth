@@ -6,17 +6,12 @@
 make
 ```
 
-You can then execute the binary, which should be in `./bin/`.
+You can then move the binary, which should be in `./bin/`, to any location, and execute it.
 
-## building
+## release
 
 ```
 make build-all
-```
-
-## publishing
-
-```
 make version-patch|minor|major
 make publish
 ```

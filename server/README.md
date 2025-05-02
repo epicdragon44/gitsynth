@@ -1,17 +1,14 @@
 # server
 
-## development
-
 ```
-make
-```
+# Build the server
+make build
 
-You can then execute the binary, which should be in `./bin/`.
+# Run the server directly (for development)
+make run
 
-## deployment
-
-```
-make deploy
+# Run the server in prod (using the compiled binary)
+make serve
 ```
 
 ## env
