@@ -48,10 +48,14 @@ func main() {
 		panic(err)
 	}
 
+	// Initialize GitService
+	gitService := NewGitService()
+
 	// Initialize handler
 	prMergeHandler := &PRMergeHandler{
 		ClientCreator: cc,
 		workdir:      tmpDir,
+		gitService:   gitService,
 	}
 
 	// Create GitHub webhook handler
