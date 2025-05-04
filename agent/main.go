@@ -9,13 +9,11 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/anthropics/anthropic-sdk-go"
 	"github.com/anthropics/anthropic-sdk-go/option"
 	"github.com/invopop/jsonschema"
-	"github.com/joho/godotenv"
 )
 
 type Agent struct {
@@ -140,39 +138,42 @@ You may begin.
 `
 
 func main() {
-
 	// --- Parse command line arguments ---
 	debugMode := flag.Bool("d", false, "Enable debug mode with verbose logging")
 	flag.BoolVar(debugMode, "debug", false, "Enable debug mode with verbose logging")
+	apiKeyFlag := flag.String("api-key", "", "Anthropic API key. If provided, will be saved for future use")
 	flag.Parse()
 
-	// --- Load environment variables from .env file or system ---
-
-	envPath := ".env"
-	envLoadErr := godotenv.Load(envPath)
-
-	apiKey := os.Getenv("ANTHROPIC_API_KEY")
-	if apiKey == "" {
-		fmt.Println("Error: ANTHROPIC_API_KEY not found in your environment.")
-		if envLoadErr != nil {
-			// Try to check if the file exists to provide a more specific error
-			if _, statErr := os.Stat(envPath); os.IsNotExist(statErr) {
-				absPath, _ := filepath.Abs(envPath)
-				fmt.Printf("No .env file found in current directory (%s)\n. You may create one and add ANTHROPIC_API_KEY=your-api-key to it.\n", absPath)
-			} else {
-				fmt.Printf(".env file found, but failed to load: %v\n", envLoadErr)
-			}
-		} else {
-			fmt.Println(".env loaded successfully, but no ANTHROPIC_API_KEY found. Either set it in your environment by hand, or set it in your .env file.")
-		}
+	// Load existing config
+	config, err := loadConfig()
+	if err != nil {
+		fmt.Printf("Error loading config: %v\n", err)
 		os.Exit(1)
 	}
+
+	// If API key is provided via CLI, save it to config
+	if *apiKeyFlag != "" {
+		config.APIKey = *apiKeyFlag
+		if err := saveConfig(config); err != nil {
+			fmt.Printf("Error saving config: %v\n", err)
+			os.Exit(1)
+		}
+	}
+
+	// Use API key from config or fail
+	if config.APIKey == "" {
+		configPath, _ := getConfigPath()
+		fmt.Printf("Error: No Anthropic API key found. Please provide one using the -api-key flag.\n")
+		fmt.Printf("The API key will be saved to %s for future use.\n", configPath)
+		os.Exit(1)
+	}
+
+	apiKey := config.APIKey
 
 	// --- Initialize the logger ---
 	logger := NewLogger(*debugMode)
 
 	// --- Initialize the agent and run it ---
-
 	client := anthropic.NewClient(option.WithAPIKey(apiKey))
 	scanner := bufio.NewScanner(os.Stdin)
 	getUserMessage := func() (string, bool) {
@@ -212,7 +213,7 @@ func NewAgent(client *anthropic.Client, getUserMessage func() (string, bool), to
 func (a *Agent) Run(ctx context.Context) error {
 	conversation := []anthropic.MessageParam{}
 
-	a.logger.Info("WELCOME TO GITSYNTH. Use 'ctrl-c' to quit at any time.\n")
+	a.logger.Info("Welcome to GitSynth. Use 'ctrl-c' to quit at any time.\n")
 	a.logger.Info("GitSynth is now resolving your merge conflicts...\n")
 
 	userMessage := anthropic.NewUserMessage(anthropic.NewTextBlock(DefaultPrompt))

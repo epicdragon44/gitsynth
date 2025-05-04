@@ -33,8 +33,14 @@
                 <p
                     class="text-sm text-white/60 tracking-tighter text-center mt-2"
                 >
-                    Resolve all your Git merge conflicts in just one line.
-                    <br />Just run <span class="text-white">npx gitsynth</span>.
+                    Resolve all your Git merge conflicts instantly,<br />
+                    with an AI agent that knows your code history.<br />
+                    <br />Just run
+                    <span
+                        class="text-white underline decoration-2 decoration-emerald-400 highlight bg-emerald-400/20 hover:bg-emerald-400/40 px-0.5 mx-0.5 transition-all duration-200 ease-in-out"
+                        >npx gitsynth</span
+                    >.<span class="text-emerald-400">*</span>
+                    <br />
                 </p>
                 <div class="rounded-lg overflow-clip bg-white/10 pb-4 mt-8">
                     <div
@@ -55,10 +61,13 @@
                         </div>
                         <div class="h-5"></div>
                         <div
-                            class="text-white w-full px-4 py-1 bg-emerald-400/10 animate-pulse shadow shadow-emerald-400"
+                            class="text-white w-full px-4 py-1 bg-emerald-400/10 animate-pulse shadow shadow-emerald-400 hover:animate-none hover:bg-emerald-400/40 transition-all duration-200 ease-out"
                         >
                             <span class="text-emerald-400 font-bold">></span>
                             npx gitsynth
+                            <span class="text-white/40"
+                                >-api-key your-anthropic-key</span
+                            >
                         </div>
                         <div class="text-emerald-400/80 w-full px-4 pt-5 pb-3">
                             Merge conflicts detected. <br />
@@ -67,8 +76,20 @@
                         </div>
                     </div>
                 </div>
-                <p class="text-sm text-white tracking-tighter mt-8">
-                    By <a href="https://w3i.space/">Daniel Wei</a>
+                <p
+                    class="text-sm text-white/60 tracking-tighter mt-6 text-center"
+                >
+                    <span class="text-emerald-400">*</span> You'll need your
+                    <a
+                        href="https://console.anthropic.com/settings/keys"
+                        class="text-white"
+                        >Anthropic API Key</a
+                    >
+                    the first time.<br />After that, we'll remember it for
+                    you.<br /><br />By
+                    <a href="https://w3i.space/" class="text-white"
+                        >Daniel Wei</a
+                    >
                 </p>
             </div>
         </main>
