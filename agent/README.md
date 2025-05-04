@@ -1,17 +1,10 @@
 # GitSynth
 
-Automatic Merge Conflict Resolution.
-
-## Run Locally For Free
+Resolve all your Git merge conflicts in just one line.
 
 ```bash
-export ANTHROPIC_API_KEY=your-key # OPTIONAL if ANTHROPIC_API_KEY already set in your .env or environment
 npx gitsynth
 ```
-
-## Run as a Github Action
-
-*Coming Soon!*
 
 ## Contributing
 
