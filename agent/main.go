@@ -60,7 +60,7 @@ Your mission: Resolve all Git merge conflicts across files such that:
     Make sure you completely understand the contents of the file and the changes that are being made.
      - **Summarize each side's intent** (e.g. feature addition, logic rewrite, formatting).
      - **Plan a resolution** that integrates the intended outcomes from both sides where possible.
-    Example tool calls:
+    Example tool calls (we recommend you follow most, if not all, of these calls):
     - First, view the file contents: view_file({ "path": "src/utils.js" })
     - To view the file contents alongside a git blame:
     	view_file({
@@ -73,6 +73,14 @@ Your mission: Resolve all Git merge conflicts across files such that:
 	      "path": "src/utils.js",
 	      "commit_id": "a1b2c3"
 	    })
+	- For any symbols that are particularly conflicted or whose usage, import path, or definition is important to your ultimate resolution solution, search for it across the whole project, visit the other files, and see its definition and usages:
+		search_symbol({
+			"symbol": "someFunction",
+			"is_regex": false,
+			"case_sensitive": false,
+			"file_pattern": "*.go"
+		})
+		For each result, you can use view_file again to inspect the referenced symbol in further detail.
     - Finally, view the git conflict chunks within the file: see_file_chunks({ "path": "src/utils.js" })
 
 3. **Making Edits**:
@@ -193,6 +201,7 @@ func main() {
 		EditFileLineDefinition,
 		GitSaveChangesDefinition,
 		SeeGitStatusDefinition,
+		SearchSymbolDefinition,
 	}
 	agent := NewAgent(&client, getUserMessage, tools, logger)
 	runErr := agent.Run(context.TODO())

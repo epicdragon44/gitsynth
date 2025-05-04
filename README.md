@@ -13,3 +13,4 @@ npx gitsynth
 - [ ] Support for .cursorrules and .rules
 - [ ] Caching and other performance optimizations
 - [ ] Support multiple merge candidates.
+- [ ] Lightweight analytics.

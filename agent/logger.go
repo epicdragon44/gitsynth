@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 // Logger manages logging output based on debug flag
@@ -54,9 +53,7 @@ func (l *Logger) Error(format string, args ...interface{}) {
 
 // AgentMessage logs a message from the AI agent
 func (l *Logger) AgentMessage(message string) {
-	if strings.Contains(message, "[ALL DONE]") {
-		fmt.Println("Done!")
-	} else if l.debugMode {
+	if l.debugMode {
 		fmt.Printf("\u001b[93mGitSynth\u001b[0m: %s\n", message)
 	}
 }
