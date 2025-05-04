@@ -15,7 +15,7 @@ func main() {
 	// Create server with default parameters
 	serverParams := baseapp.DefaultParams(logger, "gitsynth.")
 	server, err := baseapp.NewServer(baseapp.HTTPConfig{
-		Address: "127.0.0.1",
+		Address: "0.0.0.0",
 		Port:    8080,
 	}, serverParams...)
 	if err != nil {

@@ -64,6 +64,12 @@ build-all:
 	GOOS=darwin GOARCH=amd64 $(GOBUILD) -o $(OUTPUT_DIR)/$(BINARY_NAME)-darwin-amd64 ./...
 	GOOS=windows GOARCH=amd64 $(GOBUILD) -o $(OUTPUT_DIR)/$(BINARY_NAME)-windows-amd64.exe ./...
 
+# Deploy using Fly.io
+.PHONY: deploy
+deploy:
+	@echo "Deploying with Fly.io..."
+	flyctl deploy
+
 .PHONY: help
 help:
 	@echo "Available targets:"
@@ -75,4 +81,5 @@ help:
 	@echo "  run:          Run server directly using go run (for development)"
 	@echo "  serve:        Build and serve the server using the compiled binary"
 	@echo "  build-all:    Build for multiple platforms"
+	@echo "  deploy:       Deploy the application using Fly.io"
 	@echo "  help:         Show this help message"

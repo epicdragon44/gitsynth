@@ -17,4 +17,7 @@ make run
 
 # Run the server in prod (using the compiled binary)
 make serve
+
+# Deploy to fly.io
+make deploy
 ```
