@@ -73,14 +73,6 @@ Your mission: Resolve all Git merge conflicts across files such that:
 	      "path": "src/utils.js",
 	      "commit_id": "a1b2c3"
 	    })
-	- For any symbols that are particularly conflicted or whose usage, import path, or definition is important to your ultimate resolution solution, search for it across the whole project, visit the other files, and see its definition and usages:
-		search_symbol({
-			"symbol": "someFunction",
-			"is_regex": false,
-			"case_sensitive": false,
-			"file_pattern": "*.go"
-		})
-		For each result, you can use view_file again to inspect the referenced symbol in further detail.
     - Finally, view the git conflict chunks within the file: see_file_chunks({ "path": "src/utils.js" })
 
 3. **Making Edits**:
@@ -95,6 +87,35 @@ Your mission: Resolve all Git merge conflicts across files such that:
 	      "chunk_id": 0,
 	      "new_content": "function processData(data) {\n  // Merged solution\n  return data.filter(item => item.isValid);\n}"
 	    })
+
+3.5 **Bonus step**:
+   - Sometimes, it may be the case that the definition for a symbol has changed such that all usages of that symbol (ie its name) should also be changed. In those cases, don't be afraid to find it across the whole project:
+  		search_symbol({
+			"symbol": "someFunction",
+			"is_regex": false,
+			"case_sensitive": false,
+			"file_pattern": "*.go"
+		})
+   - For each result, you can use view_file again to inspect the referenced symbol in further detail.
+ 		view_file({
+	      "path": "src/utils.js",
+	      "with_blame": true
+	    })
+   - And then edit that file line by line in order to make sure the usage is correct:
+   		edit_file_line({
+	       "path": "path/to/file.txt",
+	       "start_line": 10,
+	       "end_line": 15,
+	       "new_content": "This content will replace\nall lines from 10 to 15\nwith these three lines"
+	     })
+	- If Find and Replace All is more appropriate (ie for when the name of the symbol itself has changed, or a common import path has changed):
+		find_replace_all({
+			"find": "someFunction",
+			"replace": "newFunctionName",
+			"is_regex": false,
+			"case_sensitive": true,
+			"file_pattern": "*.go"
+		})
 
 4. **Post-Conflict Cleanup**:
    - When all conflicts are resolved, review your changes and do a sense check to make sure all files look correct before saving your changes.
@@ -202,6 +223,7 @@ func main() {
 		GitSaveChangesDefinition,
 		SeeGitStatusDefinition,
 		SearchSymbolDefinition,
+		FindReplaceAllDefinition,
 	}
 	agent := NewAgent(&client, getUserMessage, tools, logger)
 	runErr := agent.Run(context.TODO())
