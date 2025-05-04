@@ -20,7 +20,7 @@ type Agent struct {
 	client         *anthropic.Client
 	getUserMessage func() (string, bool)
 	tools          []ToolDefinition
-	logger         *Logger
+	logger         *GsLogger
 }
 
 type ToolDefinition struct {
@@ -170,11 +170,11 @@ func main() {
 
 	apiKey := config.APIKey
 
-	// --- Initialize the logger ---
-	logger := NewLogger(*debugMode)
-
-	// --- Initialize the agent and run it ---
+	// --- Initialize the client ---
 	client := anthropic.NewClient(option.WithAPIKey(apiKey))
+
+	// --- Initialize the logger ---
+	logger := NewGsLogger(*debugMode, &client)
 	scanner := bufio.NewScanner(os.Stdin)
 	getUserMessage := func() (string, bool) {
 		if !scanner.Scan() {
@@ -201,7 +201,7 @@ func main() {
 	}
 }
 
-func NewAgent(client *anthropic.Client, getUserMessage func() (string, bool), tools []ToolDefinition, logger *Logger) *Agent {
+func NewAgent(client *anthropic.Client, getUserMessage func() (string, bool), tools []ToolDefinition, logger *GsLogger) *Agent {
 	return &Agent{
 		client:         client,
 		getUserMessage: getUserMessage,
@@ -214,7 +214,6 @@ func (a *Agent) Run(ctx context.Context) error {
 	conversation := []anthropic.MessageParam{}
 
 	a.logger.Info("Welcome to GitSynth. Use 'ctrl-c' to quit at any time.\n")
-	a.logger.Info("GitSynth is now resolving your merge conflicts...\n")
 
 	userMessage := anthropic.NewUserMessage(anthropic.NewTextBlock(DefaultPrompt))
 	conversation = append(conversation, userMessage)
