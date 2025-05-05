@@ -16,10 +16,10 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server .
 
 # Use a small image for the final container
-FROM debian:bookworm-slim
+FROM fedora:latest
 
 # Install ca-certificates for HTTPS
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN dnf -y update && dnf -y install ca-certificates && dnf clean all
 
 WORKDIR /app
 
